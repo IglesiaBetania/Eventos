@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventPlanner SaaS | Gestión de Eventos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { brand: '#4f46e5' },
+        animation: { 'fade-in-up':'fadeInUp 0.5s ease-out' },
+        keyframes: { fadeInUp: {
+          '0%': { opacity:'0', transform:'translateY(20px)' },
+          '100%': { opacity:'1', transform:'translateY(0)' }
+        }}
+      }}
+    }
+  </script>
+  <style>
+    .view-section { display:none; }
+    .view-section.active { display:block; animation:fadeInUp .4s ease-out; }
+    .skeleton { background:linear-gradient(90deg,#f1f5f9 25%,#e2e8f0 50%,#f1f5f9 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-calendar-check text-brand text-2xl"></i>
+          <span class="font-bold text-xl tracking-tight">Event<span class="text-brand">Planner</span></span>
+        </div>
+        <div class="hidden md:flex space-x-8">
+          <a href="#" class="text-slate-600 hover:text-brand transition-colors font-medium">Dashboard</a>
+          <a href="#" class="text-brand font-medium">Mis Eventos</a>
+          <a href="#" class="text-slate-600 hover:text-brand transition-colors font-medium">Planes</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="estado-backend" class="hidden sm:inline-flex items-center gap-1 text-xs text-slate-400">
+            <span class="w-2 h-2 rounded-full bg-slate-300"></span> verificando…
+          </span>
+          <button class="bg-brand text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all shadow-sm hover:shadow-md">
+            Acceder
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <section id="view-eventos" class="view-section active">
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Mis Eventos</h1>
+          <p class="text-sm text-slate-500 mt-1">Administra tus eventos y genera códigos QR para invitados.</p>
+        </div>
+        <button onclick="abrirModalEvento()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm hover:bg-slate-800 transition-all flex items-center gap-2 shadow-sm">
+          <i class="fa-solid fa-plus"></i> Nuevo Evento
+        </button>
+      </div>
+
+      <!-- Skeleton / Grid -->
+      <div id="contenedor-eventos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Skeleton -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+          <div class="h-10 w-10 rounded-lg skeleton mb-4"></div>
+          <div class="h-5 w-3/4 skeleton rounded mb-2"></div>
+          <div class="h-4 w-1/2 skeleton rounded mb-4"></div>
+          <div class="h-4 w-full skeleton rounded"></div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+          <div class="h-10 w-10 rounded-lg skeleton mb-4"></div>
+          <div class="h-5 w-3/4 skeleton rounded mb-2"></div>
+          <div class="h-4 w-1/2 skeleton rounded mb-4"></div>
+          <div class="h-4 w-full skeleton rounded"></div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+          <div class="h-10 w-10 rounded-lg skeleton mb-4"></div>
+          <div class="h-5 w-3/4 skeleton rounded mb-2"></div>
+          <div class="h-4 w-1/2 skeleton rounded mb-4"></div>
+          <div class="h-4 w-full skeleton rounded"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL: NUEVO EVENTO ================= -->
+  <div id="modal-evento" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-[100]">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-lg font-bold">Nuevo Evento</h2>
+        <button onclick="cerrarModalEvento()" class="text-slate-400 hover:text-slate-600 transition-colors">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+      <form id="form-evento" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Nombre del evento</label>
+          <input name="nombreEvento" required class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Fecha</label>
+            <input type="date" name="fecha" required class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Capacidad</label>
+            <input type="number" min="1" name="capacidad" required class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Lugar</label>
+          <input name="lugar" required class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all">
+        </div>
+        <button type="submit" class="w-full bg-brand text-white py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+          <span class="btn-text">Crear Evento</span>
+          <i class="fa-solid fa-arrow-right btn-icon"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: NUEVO INVITADO + QR ================= -->
+  <div id="modal-invitado" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-[100]">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-lg font-bold">Añadir Invitado</h2>
+        <button onclick="cerrarModalInvitado()" class="text-slate-400 hover:text-slate-600 transition-colors">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+      <form id="form-invitado" class="space-y-4">
+        <input type="hidden" name="idEvento">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Nombre del invitado</label>
+          <input name="nombre" required class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Email (opcional)</label>
+          <input type="email" name="email" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all">
+        </div>
+        <button type="submit" class="w-full bg-brand text-white py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition-all">
+          Generar QR
+        </button>
+      </form>
+
+      <!-- Resultado QR -->
+      <div id="resultado-qr" class="hidden mt-5 pt-5 border-t border-slate-100 text-center">
+        <p class="text-sm text-slate-500 mb-3">Código QR generado:</p>
+        <div id="qrcode" class="inline-block p-3 bg-white rounded-lg border border-slate-200"></div>
+        <p id="qr-texto" class="text-xs text-slate-400 mt-3 break-all"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    /**********************************************
+     * CONFIGURACIÓN
+     **********************************************/
+    const API_URL = 'https://script.google.com/macros/s/AKfycbytGNcaZmaBsGBWRY0X3K6pXC1BtP3GJDCUDSs9QpUnnzf0cv4148tsHD6ds3H2PTF8/exec';
+
+    /**********************************************
+     * API HELPERS
+     **********************************************/
+    async function apiGet(action, params = {}) {
+      const qs = new URLSearchParams({ action, ...params }).toString();
+      const res = await fetch(`${API_URL}?${qs}`, { method:'GET', redirect:'follow' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }
+
+    async function apiPost(action, data) {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action, data }),
+        headers: { 'Content-Type':'text/plain;charset=utf-8' },
+        redirect: 'follow'
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }
+
+    /**********************************************
+     * UI: TOAST
+     **********************************************/
+    function toast(msg, tipo = 'success') {
+      const el = document.createElement('div');
+      el.className = `fixed bottom-5 right-5 px-5 py-3 rounded-lg shadow-xl text-white font-medium text-sm flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-300 ${tipo==='success'?'bg-slate-900':'bg-red-500'} z-[200]`;
+      el.innerHTML = `<i class="fa-solid ${tipo==='success'?'fa-circle-check':'fa-circle-exclamation'}"></i><span>${msg}</span>`;
+      document.body.appendChild(el);
+      requestAnimationFrame(() => el.classList.remove('translate-y-10','opacity-0'));
+      setTimeout(() => {
+        el.classList.add('translate-y-10','opacity-0');
+        setTimeout(() => el.remove(), 300);
+      }, 3000);
+    }
+
+    /**********************************************
+     * ESTADO BACKEND
+     **********************************************/
+    async function verificarBackend() {
+      const badge = document.getElementById('estado-backend');
+      try {
+        const r = await apiGet('ping');
+        if (r.status === 'ok') {
+          badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-green-500"></span> Backend online';
+        } else throw new Error(r.message);
+      } catch (e) {
+        badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span> Offline';
+        console.error(e);
+      }
+    }
+
+    /**********************************************
+     * EVENTOS
+     **********************************************/
+    let eventosCache = [];
+
+    async function cargarEventos() {
+      const cont = document.getElementById('contenedor-eventos');
+      try {
+        const r = await apiGet('getEventos');
+        if (r.status !== 'ok') throw new Error(r.message);
+        eventosCache = r.data;
+        renderEventos(r.data);
+      } catch (e) {
+        cont.innerHTML = `
+          <div class="col-span-full text-center py-16 bg-white rounded-xl border border-slate-100">
+            <i class="fa-solid fa-plug-circle-xmark text-4xl text-slate-300 mb-3"></i>
+            <p class="text-slate-500 font-medium">No se pudieron cargar los eventos</p>
+            <p class="text-slate-400 text-sm mt-1">${e.message}</p>
+            <button onclick="cargarEventos()" class="mt-4 text-brand text-sm font-medium hover:underline">
+              <i class="fa-solid fa-rotate-right mr-1"></i> Reintentar
+            </button>
+          </div>`;
+      }
+    }
+
+    function renderEventos(eventos) {
+      const cont = document.getElementById('contenedor-eventos');
+
+      if (!eventos.length) {
+        cont.innerHTML = `
+          <div class="col-span-full text-center py-16 bg-white rounded-xl border border-dashed border-slate-200">
+            <i class="fa-regular fa-calendar text-4xl text-slate-300 mb-3"></i>
+            <p class="text-slate-600 font-medium">Aún no tienes eventos</p>
+            <p class="text-slate-400 text-sm mt-1 mb-5">Crea tu primer evento para empezar</p>
+            <button onclick="abrirModalEvento()" class="bg-brand text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all inline-flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i> Crear Evento
+            </button>
+          </div>`;
+        return;
+      }
+
+      cont.innerHTML = eventos.map(ev => {
+        const fecha = ev.Fecha ? new Date(ev.Fecha).toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' }) : 'Sin fecha';
+        const estado = ev.Estado || 'Activo';
+        const estadoColor = estado === 'Activo' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600';
+        return `
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group">
+            <div class="flex justify-between items-start mb-4">
+              <div class="p-3 bg-indigo-50 text-brand rounded-lg group-hover:bg-brand group-hover:text-white transition-colors">
+                <i class="fa-solid fa-champagne-glasses text-xl"></i>
+              </div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full ${estadoColor}">${estado}</span>
+            </div>
+            <h3 class="font-bold text-lg mb-1 truncate">${ev.Nombre_Evento}</h3>
+            <p class="text-slate-500 text-sm mb-1"><i class="fa-regular fa-calendar mr-1"></i> ${fecha}</p>
+            <p class="text-slate-500 text-sm mb-4 truncate"><i class="fa-solid fa-location-dot mr-1"></i> ${ev.Lugar || '—'}</p>
+            <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+              <span class="text-sm text-slate-500">Capacidad: ${ev.Capacidad || 0}</span>
+              <button onclick="event.stopPropagation(); abrirModalInvitado('${ev.ID_Evento}')"
+                      class="text-xs text-brand font-medium hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-user-plus"></i> Invitado
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    /**********************************************
+     * MODAL EVENTO
+     **********************************************/
+    function abrirModalEvento() {
+      document.getElementById('modal-evento').classList.remove('hidden');
+      document.getElementById('modal-evento').classList.add('flex');
+    }
+    function cerrarModalEvento() {
+      document.getElementById('modal-evento').classList.add('hidden');
+      document.getElementById('modal-evento').classList.remove('flex');
+      document.getElementById('form-evento').reset();
+    }
+
+    document.getElementById('form-evento').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type=submit]');
+      const txt = btn.querySelector('.btn-text');
+      const original = txt.textContent;
+      txt.textContent = 'Creando...';
+      btn.disabled = true;
+
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      data.capacidad = Number(data.capacidad);
+
+      try {
+        const r = await apiPost('crearEvento', data);
+        if (r.status !== 'ok') throw new Error(r.message);
+        toast('Evento creado exitosamente');
+        cerrarModalEvento();
+        cargarEventos();
+      } catch (err) {
+        toast(err.message, 'error');
+      } finally {
+        txt.textContent = original;
+        btn.disabled = false;
+      }
+    });
+
+    /**********************************************
+     * MODAL INVITADO + QR
+     **********************************************/
+    function abrirModalInvitado(idEvento) {
+      document.getElementById('modal-invitado').classList.remove('hidden');
+      document.getElementById('modal-invitado').classList.add('flex');
+      document.querySelector('#form-invitado [name=idEvento]').value = idEvento;
+      document.getElementById('resultado-qr').classList.add('hidden');
+    }
+    function cerrarModalInvitado() {
+      document.getElementById('modal-invitado').classList.add('hidden');
+      document.getElementById('modal-invitado').classList.remove('flex');
+      document.getElementById('form-invitado').reset();
+      document.getElementById('qrcode').innerHTML = '';
+    }
+
+    document.getElementById('form-invitado').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+
+      try {
+        const r = await apiPost('crearInvitado', data);
+        if (r.status !== 'ok') throw new Error(r.message);
+
+        // Render QR
+        const contQr = document.getElementById('qrcode');
+        contQr.innerHTML = '';
+        new QRCode(contQr, {
+          text: r.data.QR_Code,
+          width: 180,
+          height: 180,
+          colorDark: '#0f172a',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+        document.getElementById('qr-texto').textContent = r.data.QR_Code;
+        document.getElementById('resultado-qr').classList.remove('hidden');
+        toast('Invitado creado · QR generado');
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    });
+
+    /**********************************************
+     * INIT
+     **********************************************/
+    document.addEventListener('DOMContentLoaded', () => {
+      verificarBackend();
+      cargarEventos();
+    });
+  </script>
+</body>
+</html>
