@@ -12,9 +12,7 @@ tailwind.config = {
   darkMode: 'class',
   theme: {
     extend: {
-      colors: {
-        brand: { DEFAULT: '#4F46E5', light: '#6366F1', dark: '#4338CA' }
-      }
+      colors: { brand: { DEFAULT: '#4F46E5', light: '#6366F1', dark: '#4338CA' } }
     }
   }
 }
@@ -31,7 +29,7 @@ tailwind.config = {
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
 
-<!-- ==================== NAVBAR ==================== -->
+<!-- NAVBAR -->
 <nav class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-custom border-b border-slate-200 dark:border-slate-700">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
     <div class="flex items-center gap-2">
@@ -49,7 +47,7 @@ tailwind.config = {
   </div>
 </nav>
 
-<!-- Spinner global -->
+<!-- Spinner -->
 <div id="globalSpinner" class="fixed inset-0 bg-slate-50 dark:bg-slate-900 z-[100] flex items-center justify-center flex-col gap-4">
   <div class="w-14 h-14 border-4 border-brand border-t-transparent rounded-full animate-spin"></div>
   <p class="text-slate-500">Cargando plataforma...</p>
@@ -95,7 +93,7 @@ tailwind.config = {
   </footer>
 </main>
 
-<!-- ==================== MODAL INSCRIPCIÓN ==================== -->
+<!-- MODAL INSCRIPCIÓN -->
 <div id="modalInscripcion" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-custom p-4 overflow-y-auto">
   <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full my-8 fade-in">
     <div class="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-700">
@@ -103,28 +101,16 @@ tailwind.config = {
       <button onclick="cerrarModal('modalInscripcion')" class="text-slate-500 hover:text-slate-900 dark:hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <form id="formInscripcion" class="p-6 space-y-4">
-      <input type="hidden" id="inscTipo" />
-      <input type="hidden" id="inscPrecio" />
-      <input type="hidden" id="inscEvento" />
-      <input type="hidden" id="inscPlan" />
-
+      <input type="hidden" id="inscTipo" /><input type="hidden" id="inscPrecio" /><input type="hidden" id="inscEvento" /><input type="hidden" id="inscPlan" />
       <div class="bg-brand/5 border border-brand/20 rounded-lg p-3 text-sm">
         <p><b>Evento:</b> <span id="inscEventoLabel">-</span></p>
         <p><b>Plan:</b> <span id="inscPlanLabel">-</span></p>
         <p><b>Precio:</b> $<span id="inscPrecioLabel">0</span> USD</p>
       </div>
-
       <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium mb-1">Cédula *</label>
-          <input id="inscCedula" required inputmode="numeric" pattern="[0-9]+" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="12345678" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Nombre y Apellido *</label>
-          <input id="inscNombre" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="Juan Pérez" />
-        </div>
+        <div><label class="block text-sm font-medium mb-1">Cédula *</label><input id="inscCedula" required inputmode="numeric" pattern="[0-9]+" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="12345678" /></div>
+        <div><label class="block text-sm font-medium mb-1">Nombre y Apellido *</label><input id="inscNombre" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="Juan Pérez" /></div>
       </div>
-
       <div>
         <label class="block text-sm font-medium mb-1">Fecha de Nacimiento *</label>
         <div class="grid grid-cols-3 gap-2">
@@ -133,75 +119,32 @@ tailwind.config = {
           <select id="inscAnio" required class="px-2 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"></select>
         </div>
       </div>
-
       <div class="grid md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium mb-1">Teléfono *</label>
           <div class="flex gap-2">
-            <select id="inscPrefijo" class="px-2 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-              <option value="58">+58 (VE)</option>
-              <option value="57">+57 (CO)</option>
-              <option value="1">+1 (US)</option>
-              <option value="34">+34 (ES)</option>
-              <option value="52">+52 (MX)</option>
-            </select>
+            <select id="inscPrefijo" class="px-2 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"><option value="58">+58</option><option value="57">+57</option><option value="1">+1</option></select>
             <input id="inscTelefono" required inputmode="numeric" pattern="[0-9]{7,11}" class="flex-1 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="04141234567" />
           </div>
         </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Correo (opcional)</label>
-          <input id="inscCorreo" type="email" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="correo@ejemplo.com" />
-        </div>
+        <div><label class="block text-sm font-medium mb-1">Correo (opcional)</label><input id="inscCorreo" type="email" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="correo@ejemplo.com" /></div>
       </div>
-
       <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium mb-1">¿Pertenece a Iglesia?</label>
-          <select id="inscIglesia" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option value="No">No</option>
-            <option value="Si">Sí</option>
-          </select>
-        </div>
-        <div id="wrapCualIglesia" class="hidden">
-          <label class="block text-sm font-medium mb-1">¿Cuál?</label>
-          <input id="inscCual" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="Nombre de la iglesia" />
-        </div>
+        <div><label class="block text-sm font-medium mb-1">¿Pertenece a Iglesia?</label><select id="inscIglesia" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"><option value="No">No</option><option value="Si">Sí</option></select></div>
+        <div id="wrapCualIglesia" class="hidden"><label class="block text-sm font-medium mb-1">¿Cuál?</label><input id="inscCual" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" /></div>
       </div>
-
       <div class="grid md:grid-cols-3 gap-4">
-        <div>
-          <label class="block text-sm font-medium mb-1">Talla Franela</label>
-          <select id="inscFranela" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option value="">N/A</option>
-            <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Menú</label>
-          <select id="inscMenu" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option value="">N/A</option>
-            <option>Sin preferencia</option><option>Pollo</option><option>Carne</option><option>Vegetariano</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Bebida</label>
-          <select id="inscBebida" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option value="">N/A</option>
-            <option>Agua</option><option>Refresco</option><option>Jugo</option>
-          </select>
-        </div>
+        <div><label class="block text-sm font-medium mb-1">Talla</label><select id="inscFranela" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"><option value="">N/A</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></div>
+        <div><label class="block text-sm font-medium mb-1">Menú</label><select id="inscMenu" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"><option value="">N/A</option><option>Pollo</option><option>Carne</option><option>Vegetariano</option></select></div>
+        <div><label class="block text-sm font-medium mb-1">Bebida</label><select id="inscBebida" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"><option value="">N/A</option><option>Agua</option><option>Refresco</option><option>Jugo</option></select></div>
       </div>
-
       <div id="inscError" class="hidden text-sm text-red-600 bg-red-50 dark:bg-red-900/30 rounded-lg p-3"></div>
-
-      <button type="submit" id="btnInscripcion" class="w-full bg-brand hover:bg-brand-dark text-white py-3 rounded-xl font-semibold transition disabled:opacity-60">
-        <i class="fa-solid fa-check mr-2"></i> Confirmar inscripción
-      </button>
+      <button type="submit" id="btnInscripcion" class="w-full bg-brand hover:bg-brand-dark text-white py-3 rounded-xl font-semibold transition disabled:opacity-60"><i class="fa-solid fa-check mr-2"></i> Confirmar inscripción</button>
     </form>
   </div>
 </div>
 
-<!-- ==================== MODAL TICKET QR ==================== -->
+<!-- MODAL TICKET -->
 <div id="modalTicket" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-custom p-4 overflow-y-auto">
   <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full my-8 fade-in">
     <div class="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-700">
@@ -212,21 +155,17 @@ tailwind.config = {
       <p class="text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i> ¡Inscripción registrada!</p>
       <div id="qrContainer" class="bg-white p-3 rounded-xl inline-block"></div>
       <div class="text-sm space-y-1">
-        <p class="text-slate-500">Código</p>
-        <p id="tkCodigo" class="font-mono text-lg font-bold text-brand"></p>
-        <p class="text-slate-500 mt-2">Nombre</p>
-        <p id="tkNombre" class="font-medium"></p>
-        <p class="text-slate-500 mt-2">Evento</p>
-        <p id="tkEvento" class="font-medium"></p>
-        <p class="text-slate-500 mt-2">Plan</p>
-        <p id="tkPlan" class="font-medium"></p>
+        <p class="text-slate-500">Código</p><p id="tkCodigo" class="font-mono text-lg font-bold text-brand"></p>
+        <p class="text-slate-500 mt-2">Nombre</p><p id="tkNombre" class="font-medium"></p>
+        <p class="text-slate-500 mt-2">Evento</p><p id="tkEvento" class="font-medium"></p>
+        <p class="text-slate-500 mt-2">Plan</p><p id="tkPlan" class="font-medium"></p>
       </div>
       <button onclick="compartirWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-semibold"><i class="fa-brands fa-whatsapp mr-2"></i>Compartir por WhatsApp</button>
     </div>
   </div>
 </div>
 
-<!-- ==================== MODAL PAGO ==================== -->
+<!-- MODAL PAGO -->
 <div id="modalPago" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-custom p-4 overflow-y-auto">
   <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full my-8 fade-in">
     <div class="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-700">
@@ -234,14 +173,7 @@ tailwind.config = {
       <button onclick="cerrarModal('modalPago')" class="text-slate-500 hover:text-slate-900 dark:hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <form id="formPago" class="p-6 space-y-4">
-      <input type="hidden" id="pagoIdPago" />
-      <input type="hidden" id="pagoIdCongreso" />
-      <input type="hidden" id="pagoCedula" />
-      <input type="hidden" id="pagoNombre" />
-      <input type="hidden" id="pagoEvento" />
-      <input type="hidden" id="pagoPlan" />
-      <input type="hidden" id="pagoCorreo" />
-
+      <input type="hidden" id="pagoIdPago" /><input type="hidden" id="pagoIdCongreso" /><input type="hidden" id="pagoCedula" /><input type="hidden" id="pagoNombre" /><input type="hidden" id="pagoEvento" /><input type="hidden" id="pagoPlan" /><input type="hidden" id="pagoCorreo" />
       <div class="bg-brand/5 border border-brand/20 rounded-lg p-4 text-sm space-y-1">
         <p><b>Evento:</b> <span id="pagoEventoLabel">-</span></p>
         <p><b>Plan:</b> <span id="pagoPlanLabel">-</span></p>
@@ -249,67 +181,28 @@ tailwind.config = {
         <p><b>Tasa BCV:</b> <span id="pagoTasaLabel">0</span> Bs/USD</p>
         <p class="text-lg font-bold text-brand">Total a pagar: Bs. <span id="pagoTotalVesLabel">0</span></p>
       </div>
-
-      <div>
-        <p class="text-sm font-semibold mb-2">Cuentas disponibles:</p>
-        <div id="cuentasList" class="grid sm:grid-cols-2 gap-2 text-xs"></div>
-      </div>
-
+      <div><p class="text-sm font-semibold mb-2">Cuentas disponibles:</p><div id="cuentasList" class="grid sm:grid-cols-2 gap-2 text-xs"></div></div>
       <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium mb-1">Tipo de Pago *</label>
-          <select id="pagoTipo" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option>Pago Móvil</option><option>Transferencia</option><option>Zelle</option><option>Efectivo</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Fecha *</label>
-          <input id="pagoFecha" type="date" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" />
-        </div>
+        <div><label class="block text-sm font-medium mb-1">Tipo de Pago *</label><select id="pagoTipo" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"><option>Pago Móvil</option><option>Transferencia</option><option>Zelle</option></select></div>
+        <div><label class="block text-sm font-medium mb-1">Fecha *</label><input id="pagoFecha" type="date" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" /></div>
       </div>
-
       <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium mb-1">Banco Origen *</label>
-          <input id="pagoBancoOrigen" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="Banesco" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Referencia *</label>
-          <input id="pagoReferencia" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="123456" />
-        </div>
+        <div><label class="block text-sm font-medium mb-1">Banco Origen *</label><input id="pagoBancoOrigen" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" /></div>
+        <div><label class="block text-sm font-medium mb-1">Referencia *</label><input id="pagoReferencia" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" /></div>
       </div>
-
       <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium mb-1">Banco Destino *</label>
-          <input id="pagoBancoDestino" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="Banesco" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">Monto abonado (Bs) *</label>
-          <input id="pagoMonto" required inputmode="decimal" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" />
-        </div>
+        <div><label class="block text-sm font-medium mb-1">Banco Destino *</label><input id="pagoBancoDestino" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" /></div>
+        <div><label class="block text-sm font-medium mb-1">Monto abonado (Bs) *</label><input id="pagoMonto" required inputmode="decimal" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" /></div>
       </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1">Modalidad</label>
-        <input id="pagoModalidad" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="Ej: Evento completo" />
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1">Comprobante (imagen) *</label>
-        <input id="pagoComprobante" type="file" accept="image/*" required class="w-full text-sm file:mr-3 file:px-3 file:py-2 file:rounded-lg file:border-0 file:bg-brand file:text-white file:font-semibold file:cursor-pointer" />
-      </div>
-
+      <div><label class="block text-sm font-medium mb-1">Modalidad</label><input id="pagoModalidad" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" /></div>
+      <div><label class="block text-sm font-medium mb-1">Comprobante (imagen) *</label><input id="pagoComprobante" type="file" accept="image/*" required class="w-full text-sm file:mr-3 file:px-3 file:py-2 file:rounded-lg file:border-0 file:bg-brand file:text-white file:font-semibold file:cursor-pointer" /></div>
       <div id="pagoError" class="hidden text-sm text-red-600 bg-red-50 dark:bg-red-900/30 rounded-lg p-3"></div>
-
-      <button type="submit" id="btnPago" class="w-full bg-brand hover:bg-brand-dark text-white py-3 rounded-xl font-semibold transition disabled:opacity-60">
-        <i class="fa-solid fa-paper-plane mr-2"></i> Procesando pago...
-      </button>
+      <button type="submit" id="btnPago" class="w-full bg-brand hover:bg-brand-dark text-white py-3 rounded-xl font-semibold transition disabled:opacity-60"><i class="fa-solid fa-paper-plane mr-2"></i> Procesando pago...</button>
     </form>
   </div>
 </div>
 
-<!-- ==================== MODAL HISTORIAL ==================== -->
+<!-- MODAL HISTORIAL -->
 <div id="modalHistorial" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-custom p-4 overflow-y-auto">
   <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-3xl w-full my-8 fade-in">
     <div class="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-700">
@@ -326,7 +219,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ==================== MODAL ADMIN CHECK-IN ==================== -->
+<!-- MODAL ADMIN -->
 <div id="modalAdmin" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-custom p-4 overflow-y-auto">
   <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-lg w-full my-8 fade-in">
     <div class="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-700">
@@ -334,7 +227,7 @@ tailwind.config = {
       <button onclick="cerrarModal('modalAdmin')" class="text-slate-500 hover:text-slate-900 dark:hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div id="adminLogin" class="p-6 space-y-3">
-      <label class="block text-sm font-medium">Contraseña de administrador</label>
+      <label class="block text-sm font-medium">Contraseña</label>
       <input id="adminPass" type="password" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" />
       <div id="adminError" class="hidden text-sm text-red-600"></div>
       <button onclick="loginAdmin()" class="w-full bg-brand hover:bg-brand-dark text-white py-2 rounded-lg font-semibold">Ingresar</button>
@@ -350,20 +243,11 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ==================== SCRIPT ==================== -->
+<!-- SCRIPT -->
 <script>
-// ==================== CONFIG ====================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytGNcaZmaBsGBWRY0X3K6pXC1BtP3GJDCUDSs9QpUnnzf0cv4148tsHD6ds3H2PTF8/exec";
 
-let STATE = {
-  tasaBCV: 0,
-  planes: [],
-  eventos: [],
-  cuentas: [],
-  faq: [],
-  config: {},
-  inscripcionActual: null
-};
+let STATE = { tasaBCV: 0, planes: [], eventos: [], cuentas: [], faq: [], config: {}, inscripcionActual: null };
 
 // ==================== TEMA ====================
 function initTheme() {
@@ -396,20 +280,23 @@ function cerrarModal(id) {
   m.classList.remove('modal-open');
   if (!document.querySelector('.modal-open')) document.body.style.overflow = '';
 }
-document.querySelectorAll('.fixed.inset-0').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) cerrarModal(m.id); });
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-open').forEach(m => cerrarModal(m.id));
-  }
-});
+document.querySelectorAll('.fixed.inset-0').forEach(m => m.addEventListener('click', e => { if (e.target === m) cerrarModal(m.id); }));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-open').forEach(m => cerrarModal(m.id)); });
 
 // ==================== CARGA INICIAL ====================
 async function cargarDatos() {
+  const spinner = document.getElementById('globalSpinner');
   try {
-    const res = await fetch(SCRIPT_URL);
-    const data = await res.json();
+    console.log('[DEBUG] Fetch a:', SCRIPT_URL);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
+    const res = await fetch(SCRIPT_URL, { method: 'GET', redirect: 'follow', signal: controller.signal });
+    clearTimeout(timeoutId);
+    const texto = await res.text();
+    console.log('[DEBUG] Respuesta:', texto.substring(0, 300));
+    let data;
+    try { data = JSON.parse(texto); }
+    catch (e) { throw new Error('Respuesta inválida del servidor. Revisa los permisos del Deployment de Apps Script.'); }
     if (!data.success) throw new Error(data.message || 'Error backend');
 
     STATE.tasaBCV = data.tasaBCV || 0;
@@ -420,28 +307,27 @@ async function cargarDatos() {
     STATE.config = data.config || {};
 
     document.getElementById('appName').textContent = STATE.config.nombre_app || 'Plataforma Multievento';
-    document.getElementById('bcvValue').textContent = STATE.tasaBCV.toFixed(2);
+    document.getElementById('bcvValue').textContent = STATE.tasaBCV ? STATE.tasaBCV.toFixed(2) : 'N/D';
     document.getElementById('year').textContent = new Date().getFullYear();
 
     renderPlanes();
     renderEventos();
     renderFAQ();
 
-    document.getElementById('globalSpinner').style.display = 'none';
+    spinner.style.display = 'none';
     document.getElementById('app').classList.remove('hidden');
   } catch (err) {
-    console.error(err);
-    document.getElementById('globalSpinner').innerHTML = `
-      <div class="text-center p-6">
-        <i class="fa-solid fa-triangle-exclamation text-5xl text-red-500 mb-4"></i>
-        <p class="text-slate-700 dark:text-slate-300 font-semibold">Error de conexión</p>
-        <p class="text-sm text-slate-500 mt-2">${err.message}</p>
-        <button onclick="location.reload()" class="mt-4 bg-brand text-white px-4 py-2 rounded-lg">Reintentar</button>
-      </div>`;
+    console.error('[ERROR]', err);
+    spinner.innerHTML = `<div class="text-center p-6 max-w-md">
+      <i class="fa-solid fa-triangle-exclamation text-5xl text-red-500 mb-4"></i>
+      <p class="text-slate-700 dark:text-slate-300 font-semibold text-lg">Error de conexión</p>
+      <p class="text-sm text-slate-500 mt-2 break-words">${err.message}</p>
+      <button onclick="location.reload()" class="mt-4 bg-brand text-white px-4 py-2 rounded-lg"><i class="fa-solid fa-rotate-right mr-1"></i> Reintentar</button>
+    </div>`;
   }
 }
 
-// ==================== RENDER PLANES ====================
+// ==================== RENDER ====================
 function renderPlanes() {
   const grid = document.getElementById('planesGrid');
   const colors = ['bg-slate-100 text-slate-700', 'bg-brand text-white', 'bg-amber-100 text-amber-700'];
@@ -449,43 +335,32 @@ function renderPlanes() {
     const beneficios = String(p.Beneficios_Items || '').split(';').filter(Boolean);
     const precioUSD = parseFloat(p.Precio_USD) || 0;
     const precioVES = (precioUSD * STATE.tasaBCV).toFixed(2);
-    return `
-      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col hover:shadow-xl transition">
-        <span class="self-start px-3 py-1 rounded-full text-xs font-bold ${colors[i % colors.length]}">${p.Badge_Tag || 'Plan'}</span>
-        <h3 class="mt-3 text-xl font-bold">${p.Nombre}</h3>
-        <div class="mt-2">
-          <span class="text-4xl font-extrabold text-brand">$${precioUSD}</span>
-          <span class="text-sm text-slate-500"> USD</span>
-          <p class="text-xs text-slate-500">≈ Bs. ${precioVES}</p>
-        </div>
-        <ul class="mt-4 space-y-2 text-sm flex-1">
-          ${beneficios.map(b => `<li class="flex gap-2"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span>${b.trim()}</span></li>`).join('')}
-        </ul>
-        <button onclick='abrirInscripcionPlan(${JSON.stringify(p).replace(/'/g, "&apos;")})' class="mt-6 bg-brand hover:bg-brand-dark text-white py-2 rounded-lg font-semibold">Elegir plan</button>
-      </div>`;
+    return `<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col hover:shadow-xl transition">
+      <span class="self-start px-3 py-1 rounded-full text-xs font-bold ${colors[i % colors.length]}">${p.Badge_Tag || 'Plan'}</span>
+      <h3 class="mt-3 text-xl font-bold">${p.Nombre}</h3>
+      <div class="mt-2"><span class="text-4xl font-extrabold text-brand">$${precioUSD}</span><span class="text-sm text-slate-500"> USD</span><p class="text-xs text-slate-500">≈ Bs. ${precioVES}</p></div>
+      <ul class="mt-4 space-y-2 text-sm flex-1">${beneficios.map(b => `<li class="flex gap-2"><i class="fa-solid fa-check text-emerald-500 mt-1"></i><span>${b.trim()}</span></li>`).join('')}</ul>
+      <button onclick='abrirInscripcionPlan(${JSON.stringify(p).replace(/'/g, "&apos;")})' class="mt-6 bg-brand hover:bg-brand-dark text-white py-2 rounded-lg font-semibold">Elegir plan</button>
+    </div>`;
   }).join('');
 }
 
-// ==================== RENDER EVENTOS ====================
 function renderEventos() {
   const grid = document.getElementById('eventosGrid');
-  if (!STATE.eventos.length) {
-    grid.innerHTML = '<p class="col-span-full text-center text-slate-500">No hay eventos disponibles.</p>';
-    return;
-  }
+  if (!STATE.eventos.length) { grid.innerHTML = '<p class="col-span-full text-center text-slate-500">No hay eventos disponibles.</p>'; return; }
   grid.innerHTML = STATE.eventos.map(ev => {
     const agotado = (ev.Cupos_Disponibles || 0) <= 0;
     const fecha = new Date(ev.Fecha_Hora);
     const fechaStr = isNaN(fecha) ? ev.Fecha_Hora : fecha.toLocaleString('es-VE', { dateStyle: 'medium', timeStyle: 'short' });
     const precio = parseFloat(ev.Precio_USD) || 0;
-    return `
-      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl transition">
-        <div class="h-2 bg-gradient-to-r from-brand to-brand-light"></div>
-        <div class="p-6">
-          <div class="flex justify-between items-start gap-2">
-            <span class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 font-semibold">${ev.Categoria}</span>
-            <span class="text-xs px-2 py-1 rounded ${agotado ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'} font-semibold">${agotado ? 'Agotado' : (ev.Cupos_Disponibles + ' cupos')}</span>
-          </div>
-          <h3 class="mt-3 text-lg font-bold">${ev.Nombre_Evento}</h3>
-          <p class="mt-1 text-sm text-slate-500"><i class="fa-solid fa-calendar mr-1"></i>${fechaStr}</p>
-          <p class="text-sm text-slate-500"><i class="fa-solid fa-location-dot mr-1"></i>${ev.Lugar}</p
+    return `<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl transition">
+      <div class="h-2 bg-gradient-to-r from-brand to-brand-light"></div>
+      <div class="p-6">
+        <div class="flex justify-between items-start gap-2">
+          <span class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 font-semibold">${ev.Categoria}</span>
+          <span class="text-xs px-2 py-1 rounded ${agotado ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'} font-semibold">${agotado ? 'Agotado' : (ev.Cupos_Disponibles + ' cupos')}</span>
+        </div>
+        <h3 class="mt-3 text-lg font-bold">${ev.Nombre_Evento}</h3>
+        <p class="mt-1 text-sm text-slate-500"><i class="fa-solid fa-calendar mr-1"></i>${fechaStr}</p>
+        <p class="text-sm text-slate-500"><i class="fa-solid fa-location-dot mr-1"></i>${ev.Lugar}</p>
+        <p class="mt-3 font-bold text-brand text-xl">${pre
