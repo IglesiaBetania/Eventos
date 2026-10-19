@@ -1,169 +1,137 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Multievento SaaS - Planes y Eventos</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: { 50:'#eef2ff',100:'#e0e7ff',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',900:'#312e81' }
-          },
-          animation: {
-            'fade-in': 'fadeIn 0.3s ease-in-out',
-            'scale-in': 'scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            'slide-up': 'slideUp 0.4s ease-out',
-            'pulse-soft': 'pulseSoft 2s infinite'
-          },
-          keyframes: {
-            fadeIn: { '0%':{opacity:'0'}, '100%':{opacity:'1'} },
-            scaleIn: { '0%':{opacity:'0',transform:'scale(0.95)'}, '100%':{opacity:'1',transform:'scale(1)'} },
-            slideUp: { '0%':{opacity:'0',transform:'translateY(20px)'}, '100%':{opacity:'1',transform:'translateY(0)'} },
-            pulseSoft: { '0%,100%':{opacity:'1'}, '50%':{opacity:'0.6'} }
-          }
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Plataforma Multievento</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        brand: { DEFAULT: '#4F46E5', light: '#6366F1', dark: '#4338CA' }
       }
     }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  }
+}
+</script>
+<style>
+  .fade-in { animation: fadeIn .3s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
+  .backdrop-blur-custom { backdrop-filter: blur(8px); }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #4F46E5; border-radius: 8px; }
+</style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
 
-  <!-- ========== LOADER GLOBAL ========== -->
-  <div id="loader" class="fixed inset-0 bg-white dark:bg-slate-900 z-[999] flex flex-col items-center justify-center transition-opacity duration-500">
-    <div class="w-16 h-16 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
-    <p class="mt-4 text-sm font-medium text-slate-500 dark:text-slate-400 animate-pulse">Cargando sistema...</p>
-  </div>
-
-  <!-- ========== HEADER ========== -->
-  <header class="sticky top-0 z-40 backdrop-blur-lg bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2 font-bold text-xl">
-        <i class="fa-solid fa-calendar-check text-brand-500"></i>
-        <span>Multievento</span>
-      </a>
-      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-        <a href="#planes" class="hover:text-brand-500 transition">Planes</a>
-        <a href="#eventos" class="hover:text-brand-500 transition">Eventos</a>
-        <a href="#faq" class="hover:text-brand-500 transition">FAQ</a>
-        <button onclick="abrirModal('modalHistorial')" class="hover:text-brand-500 transition">
-          <i class="fa-solid fa-clock-rotate-left mr-1"></i>Mi Historial
-        </button>
-        <button onclick="abrirModal('modalAdmin')" class="hover:text-brand-500 transition">
-          <i class="fa-solid fa-shield-halved mr-1"></i>Admin
-        </button>
-      </nav>
-      <div class="flex items-center gap-2">
-        <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Cambiar tema">
-          <i id="themeIcon" class="fa-solid fa-moon"></i>
-        </button>
-        <button onclick="abrirModal('modalHistorial')" class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-          <i class="fa-solid fa-clock-rotate-left"></i>
-        </button>
-      </div>
+<!-- ==================== NAVBAR ==================== -->
+<nav class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-custom border-b border-slate-200 dark:border-slate-700">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-calendar-star text-brand text-2xl"></i>
+      <span id="appName" class="font-bold text-lg tracking-tight">Plataforma Multievento</span>
     </div>
-  </header>
-
-  <!-- ========== BANNER TASA BCV ========== -->
-  <div class="bg-gradient-to-r from-brand-600 to-brand-400 text-white text-center text-xs md:text-sm py-2 px-4">
-    <i class="fa-solid fa-money-bill-trend-up mr-2"></i>
-    Tasa Oficial BCV del día:
-    <span id="tasaBanner" class="font-bold">Cargando...</span> VES / USD
-    <span id="tasaFecha" class="opacity-75 ml-2 text-xs"></span>
-  </div>
-
-  <!-- ========== HERO ========== -->
-  <section class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-brand-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800"></div>
-    <div class="relative max-w-7xl mx-auto px-4 py-16 md:py-24 text-center animate-slide-up">
-      <span class="inline-block px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-4">
-        <i class="fa-solid fa-sparkles mr-1"></i> Plataforma oficial
+    <div class="flex items-center gap-3">
+      <span id="bcvBadge" class="hidden sm:inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+        <i class="fa-solid fa-dollar-sign"></i> BCV: <span id="bcvValue">--</span> Bs.
       </span>
-      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
-        Vive la experiencia <span class="text-brand-500">Multievento</span>
-      </h1>
-      <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-lg mb-8">
-        Inscríbete, elige tu plan y asegura tu cupo. Todo desde un solo lugar.
-      </p>
-      <div class="flex flex-wrap justify-center gap-3">
-        <a href="#eventos" class="px-6 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold shadow-lg shadow-brand-500/20 transition transform hover:-translate-y-0.5">
-          <i class="fa-solid fa-ticket mr-2"></i>Ver Eventos
-        </a>
-        <a href="#planes" class="px-6 py-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-400 font-semibold transition">
-          <i class="fa-solid fa-tags mr-2"></i>Ver Planes
-        </a>
-      </div>
+      <button onclick="abrirModalHistorial()" class="text-sm px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"><i class="fa-solid fa-clock-rotate-left"></i> <span class="hidden sm:inline">Historial</span></button>
+      <button onclick="abrirModalAdmin()" class="text-sm px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"><i class="fa-solid fa-shield-halved"></i> <span class="hidden sm:inline">Admin</span></button>
+      <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+    </div>
+  </div>
+</nav>
+
+<!-- Spinner -->
+<div id="globalSpinner" class="fixed inset-0 bg-slate-50 dark:bg-slate-900 z-50 flex items-center justify-center flex-col gap-4">
+  <div class="w-14 h-14 border-4 border-brand border-t-transparent rounded-full animate-spin"></div>
+  <p class="text-slate-500">Cargando plataforma...</p>
+</div>
+
+<main id="app" class="hidden">
+  <!-- HERO -->
+  <section class="max-w-7xl mx-auto px-4 pt-16 pb-12 text-center">
+    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Vive la experiencia <span class="text-brand">Multievento</span></h1>
+    <p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto text-lg">Congresos, conferencias y eventos con inscripción en línea, pagos seguros y tickets QR instantáneos.</p>
+    <div class="flex gap-3 justify-center mt-8">
+      <a href="#eventos" class="bg-brand hover:bg-brand-dark text-white px-6 py-3 rounded-xl font-semibold transition"><i class="fa-solid fa-ticket mr-2"></i>Ver Eventos</a>
+      <a href="#planes" class="border border-slate-300 dark:border-slate-600 px-6 py-3 rounded-xl font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-star mr-2"></i>Planes</a>
     </div>
   </section>
 
-  <!-- ========== PLANES ========== -->
-  <section id="planes" class="max-w-7xl mx-auto px-4 py-16">
+  <!-- PLANES -->
+  <section id="planes" class="max-w-7xl mx-auto px-4 py-12">
     <div class="text-center mb-10">
-      <h2 class="text-3xl md:text-4xl font-bold">Planes y Tarifas</h2>
-      <p class="text-slate-500 dark:text-slate-400 mt-2">Elige el plan que mejor se adapte a ti</p>
+      <h2 class="text-3xl font-bold mb-2">Planes y Precios</h2>
+      <p class="text-slate-500 dark:text-slate-400">Elige el plan que mejor se ajuste a tu experiencia.</p>
     </div>
-    <div id="planesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div id="planesGrid" class="grid md:grid-cols-3 gap-6"></div>
   </section>
 
-  <!-- ========== EVENTOS ========== -->
-  <section id="eventos" class="max-w-7xl mx-auto px-4 py-16">
+  <!-- EVENTOS -->
+  <section id="eventos" class="max-w-7xl mx-auto px-4 py-12">
     <div class="text-center mb-10">
-      <h2 class="text-3xl md:text-4xl font-bold">Próximos Eventos</h2>
-      <p class="text-slate-500 dark:text-slate-400 mt-2">Inscríbete a nuestros eventos activos</p>
+      <h2 class="text-3xl font-bold mb-2">Próximos Eventos</h2>
+      <p class="text-slate-500 dark:text-slate-400">Inscríbete en segundos con cupos limitados.</p>
     </div>
-    <div id="eventosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div id="eventosGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
-  <!-- ========== FAQ ========== -->
-  <section id="faq" class="max-w-4xl mx-auto px-4 py-16">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl md:text-4xl font-bold">Preguntas Frecuentes</h2>
-    </div>
+  <!-- FAQ -->
+  <section class="max-w-4xl mx-auto px-4 py-12">
+    <h2 class="text-3xl font-bold text-center mb-8">Preguntas Frecuentes</h2>
     <div id="faqList" class="space-y-3"></div>
   </section>
 
-  <!-- ========== FOOTER ========== -->
-  <footer class="border-t border-slate-200 dark:border-slate-800 py-8 text-center text-sm text-slate-500">
-    <p>© <span id="year"></span> Multievento SaaS. Todos los derechos reservados.</p>
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-8 text-center text-slate-500 text-sm">
+    © <span id="year"></span> Plataforma Multievento. Todos los derechos reservados.
   </footer>
+</main>
 
-  <!-- ============================================================ -->
-  <!-- MODALES                                                      -->
-  <!-- ============================================================ -->
+<!-- ==================== MODAL: INSCRIPCIÓN ==================== -->
+<div id="modalInscripcion" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-custom p-4 overflow-y-auto">
+  <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full my-8 fade-in">
+    <div class="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-700">
+      <h3 class="text-xl font-bold">Inscripción</h3>
+      <button onclick="cerrarModal('modalInscripcion')" class="text-slate-500 hover:text-slate-900 dark:hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="formInscripcion" class="p-6 space-y-4">
+      <input type="hidden" id="inscTipo" />
+      <input type="hidden" id="inscPrecio" />
+      <input type="hidden" id="inscEvento" />
+      <input type="hidden" id="inscPlan" />
 
-  <!-- MODAL INSCRIPCIÓN -->
-  <div id="modalInscripcion" class="modal hidden fixed inset-0 z-50 items-center justify-center p-4">
-    <div class="modal-backdrop absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="cerrarModal('modalInscripcion')"></div>
-    <div class="modal-content relative bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-scale-in">
-      <div class="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-        <h3 class="text-lg font-bold"><i class="fa-solid fa-user-plus mr-2 text-brand-500"></i>Inscripción</h3>
-        <button onclick="cerrarModal('modalInscripcion')" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition"><i class="fa-solid fa-xmark"></i></button>
+      <div class="bg-brand/5 border border-brand/20 rounded-lg p-3 text-sm">
+        <p><b>Evento:</b> <span id="inscEventoLabel">-</span></p>
+        <p><b>Plan:</b> <span id="inscPlanLabel">-</span></p>
+        <p><b>Precio:</b> $<span id="inscPrecioLabel">0</span> USD</p>
       </div>
-      <form id="formInscripcion" class="p-6 space-y-4">
-        <div class="bg-brand-50 dark:bg-brand-900/30 rounded-xl p-3 text-sm">
-          <span class="font-semibold">Seleccionado:</span> <span id="inscSeleccion" class="text-brand-600 dark:text-brand-300"></span>
-        </div>
-        <input type="hidden" id="inscTipo" />
-        <input type="hidden" id="inscNombre" />
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-semibold mb-1">Cédula *</label>
-            <input required id="inscCedula" type="text" placeholder="12345678" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-brand-400 outline-none" />
-          </div>
-          <div>
-            <label class="block text-sm font-semibold mb-1">Nombre y Apellido *</label>
-            <input required id="inscNombreApellido" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-brand-400 outline-none" />
-          </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Cédula *</label>
+          <input id="inscCedula" required inputmode="numeric" pattern="[0-9]+" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="12345678" />
         </div>
         <div>
-          <label class="block text-sm font-semibold mb-1">Fecha de Nacimiento *</label>
-          <div class="grid grid-cols-3 gap-2">
-            <select id="inscDia" class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-brand-400 outline-none">
-              <option value="">Día</option>
-            </select>
-            <select id="inscMes" class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus
+          <label class="block text-sm font-medium mb-1">Nombre y Apellido *</label>
+          <input id="inscNombre" required class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="Juan Pérez" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Fecha de Nacimiento *</label>
+        <div class="grid grid-cols-3 gap-2">
+          <select id="inscDia" required class="px-2 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"></select>
+          <select id="inscMes" required class="px-2 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"></select>
+          <select id="inscAnio" required class="px-2 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900"></select>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Teléfono *</
